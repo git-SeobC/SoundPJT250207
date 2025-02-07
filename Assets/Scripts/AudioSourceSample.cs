@@ -1,46 +1,74 @@
+ï»¿using System.Collections;
+using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AudioSourceSample : MonoBehaviour
 {
-    // 0) ÀÎ½ºÆåÅÍ¿¡¼­ Á÷Á¢ ¿¬°áÇÏ´Â °æ¿ì
+    // 0) ì¸ìŠ¤í™í„°ì—ì„œ ì§ì ‘ ì—°ê²°í•˜ëŠ” ê²½ìš°
     public AudioSource audioSourceBGM;
 
-    // 1) AudioSourceSample °´Ã¼°¡ ÀÚÃ¼ÀûÀ¸·Î ¿Àµğ¿À ¼Ò½º¸¦ °¡Áö°í ÀÖ´Â °æ¿ì
+    // 1) AudioSourceSample ê°ì²´ê°€ ìì²´ì ìœ¼ë¡œ ì˜¤ë””ì˜¤ ì†ŒìŠ¤ë¥¼ ê°€ì§€ê³  ìˆëŠ” ê²½ìš°
     //private AudioSource ownAudioSource;
 
-    // 2) ¾À¿¡¼­ Ã£¾Æ¼­ ¿¬°áÇÏ´Â °æ¿ì
+    // 2) ì”¬ì—ì„œ ì°¾ì•„ì„œ ì—°ê²°í•˜ëŠ” ê²½ìš°
+    // 3) Resources.Load() ê¸°ëŠ¥ì„ ì´ìš©í•´ ë¦¬ì†ŒìŠ¤ í´ë”ì— ìˆëŠ” ì˜¤ë””ì˜¤ ì†ŒìŠ¤ì˜ í´ë¦½ì„ ë°›ì•„ì˜´
     public AudioSource audioSourceSFX;
 
-    public AudioClip bgm; // ¿Àµğ¿À Å¬¸³¿¡ ´ëÇÑ ¿¬°á
+    public AudioClip bgm; // ì˜¤ë””ì˜¤ í´ë¦½ì— ëŒ€í•œ ì—°ê²°
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // 1)ÀÇ °æ¿ì GetComponent<T>¸¦ ÅëÇØ ÇØ´ç °´Ã¼°¡ °¡Áö°í ÀÖ´Â ¿Àµğ¿À ¼Ò½º ¿¬°á °¡´É
-        //ownAudioSource = GetComponent<AudioSource>(); Áö±İÀº BGM Object·Î µû·Î »©³õ¾Ò±â ¶§¹®¿¡ ¿¬°á ¾ÈµÊ
+        // 1)ì˜ ê²½ìš° GetComponent<T>ë¥¼ í†µí•´ í•´ë‹¹ ê°ì²´ê°€ ê°€ì§€ê³  ìˆëŠ” ì˜¤ë””ì˜¤ ì†ŒìŠ¤ ì—°ê²° ê°€ëŠ¥
+        //ownAudioSource = GetComponent<AudioSource>(); ì§€ê¸ˆì€ BGM Objectë¡œ ë”°ë¡œ ë¹¼ë†“ì•˜ê¸° ë•Œë¬¸ì— ì—°ê²° ì•ˆë¨
 
-        // 2)ÀÇ °æ¿ì GameObject.Find().GetComponent<T> »ç¿ë
-        // GameObject.Find()´Â ¾À¿¡¼­ Ã£Àº gameObject¸¦ returnÇÏ´Â ±â´ÉÀ» °¡Áö°í ÀÖÀ½. ÀÌ °ªÀº gameObjectÀÓ.
-        // GameObjectÀÌ±â ¶§¹®¿¡ GetComponent<T>¸¦ ÀÌ¾î ÀÛ¼ºÇÔÀ¸·Î ¿ÀºêÁ§Æ®°¡ °¡Áø ÄÄÆ÷³ÍÆ®ÀÇ °ªÀ» return
-        // µû¶ó¼­ AudioSource°¡ return µÊ.
+        // 2)ì˜ ê²½ìš° GameObject.Find().GetComponent<T> ì‚¬ìš©
+        // GameObject.Find()ëŠ” ì”¬ì—ì„œ ì°¾ì€ gameObjectë¥¼ returní•˜ëŠ” ê¸°ëŠ¥ì„ ê°€ì§€ê³  ìˆìŒ. ì´ ê°’ì€ gameObjectì„.
+        // GameObjectì´ê¸° ë•Œë¬¸ì— GetComponent<T>ë¥¼ ì´ì–´ ì‘ì„±í•¨ìœ¼ë¡œ ì˜¤ë¸Œì íŠ¸ê°€ ê°€ì§„ ì»´í¬ë„ŒíŠ¸ì˜ ê°’ì„ return
+        // ë”°ë¼ì„œ AudioSourceê°€ return ë¨.
         audioSourceSFX = GameObject.Find("SFX").GetComponent<AudioSource>();
 
         audioSourceBGM.clip = bgm;
-        // ¿Àµğ¿À ¼Ò½ºÀÇ Å¬¸³À» bgmÀ¸·Î ¼³Á¤ÇÕ´Ï´Ù.
+        // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ì˜ í´ë¦½ì„ bgmìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 
-        // ¿Àµğ¿À ¼Ò½º ½ºÅ©¸³Æ® ±â´É
-        audioSourceBGM.Play(); // Å¬¸³ ½ÇÇà
-        //audioSourceBGM.Pause(); // ÀÏ½ÃÁ¤Áö
-        //audioSourceSFX.PlayOneShot(bgm); // Å¬¸³ ÇÏ³ª¸¦ ÇÑ¼ø°£ ÇÃ·¹ÀÌ
-        //audioSourceBGM.Stop(); // ¿Àµğ¿À Å¬¸³ Àç»ı ÁßÁö
-        //audioSourceBGM.UnPause(); // ÀÏ½Ã Á¤Áö ÇØÁ¦
-        //audioSourceBGM.PlayDelayed(1.0f); // 1ÃÊ µÚ¿¡ Àç»ı
+        audioSourceSFX.clip = Resources.Load("Explosion") as AudioClip;
+        // Resources.Load()ëŠ” ë¦¬ì†ŒìŠ¤ í´ë”ì—ì„œ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ì•„ ë¡œë“œí•˜ëŠ” ê¸°ëŠ¥
+        // ì´ë•Œ ë°›ì•„ì˜¤ëŠ” ê°’ì€ Objectì´ë¯€ë¡œ, as í´ë˜ìŠ¤ëª…ì„ í†µí•´ í•´ë‹¹ ë°ì´í„°ê°€ ì–´ë–¤ í˜•íƒœì˜ ë°ì´í„°ì¸ì§€ í‘œí˜„
+
+        audioSourceSFX.clip = Resources.Load("Audio/BombCharge") as AudioClip;
+        // ë¦¬ì†ŒìŠ¤ ë¡œë“œ ì‹œ ê²½ë¡œê°€ ë”°ë¡œ ì •í•´ì ¸ìˆë‹¤ë©´ "í´ë”ëª…/íŒŒì¼ëª…"ìœ¼ë¡œ ì‘ì„±
+        // ë¦¬ì†ŒìŠ¤ ë¡œë“œ ì‹œ ì‘ì„±í•˜ëŠ” ì´ë¦„ì€ í™•ì¥ìëª… (.json, .avi)ë¥¼ ì‘ì„±í•˜ì§€ ì•ŠìŒ
+
+        // UnityWebRequestì˜ GetAudioClip ê¸°ëŠ¥ í™œìš© -> ì„œë²„ë¥¼ í™œìš©í•˜ëŠ” í†µì‹  ë„êµ¬
+        StartCoroutine("GetAudioClip");
+
+        // ì˜¤ë””ì˜¤ ì†ŒìŠ¤ ìŠ¤í¬ë¦½íŠ¸ ê¸°ëŠ¥
+        audioSourceBGM.Play(); // í´ë¦½ ì‹¤í–‰
+        //audioSourceBGM.Pause(); // ì¼ì‹œì •ì§€
+        //audioSourceSFX.PlayOneShot(bgm); // í´ë¦½ í•˜ë‚˜ë¥¼ í•œìˆœê°„ í”Œë ˆì´
+        //audioSourceBGM.Stop(); // ì˜¤ë””ì˜¤ í´ë¦½ ì¬ìƒ ì¤‘ì§€
+        //audioSourceBGM.UnPause(); // ì¼ì‹œ ì •ì§€ í•´ì œ
+        //audioSourceBGM.PlayDelayed(1.0f); // 1ì´ˆ ë’¤ì— ì¬ìƒ
 
     }
+
+    //IEnumerator GetAudioClip()
+    //{
+        //UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip("file:///" + Application.dataPath + "/Audio/" + "Explosion " + ".wav", AudioType.WAV);
+        //yield return uwr.SendWebRequest(); // ì „ë‹¬
+
+        //var newClip = DownloadHandlerAudioClip.GetContent(uwr);
+        //// ë°›ì€ ê²½ë¡œë¥¼ ê¸°ë°˜ìœ¼ë¡œ ë‹¤ìš´ë¡œë“œ ì§„í–‰
+
+        //audioSourceBGM.clip = newClip; // í´ë¦½ ë“±ë¡
+        //audioSourceBGM.Play(); // í”Œë ˆì´
+    //}
+    // ì‘ì—…ì´ ëë‚˜ë©´ ê°’ì´ ì‚¬ë¼ì§.
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

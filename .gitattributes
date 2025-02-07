@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.cs text eol=auto
+*.shader text eol=auto
+*.unity text eol=auto
