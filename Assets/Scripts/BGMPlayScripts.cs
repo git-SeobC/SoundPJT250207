@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class BGMPlayScripts : MonoBehaviour
 {
     public AudioSource backgroundMusic;
-    private Button playBtn;
+    public Button playBtn;
     private bool playing = false;
     public AudioClip bgm;
 
@@ -13,22 +13,27 @@ public class BGMPlayScripts : MonoBehaviour
     {
         playBtn = GameObject.Find("PlayButton").GetComponent<Button>();
         backgroundMusic = GameObject.Find("BGM").GetComponent<AudioSource>();
-        bgm = Resources.Load("ha-undercurrent") as AudioClip;
+        bgm = Resources.Load("ha-backrooms") as AudioClip;
         backgroundMusic.clip = bgm;
 
         playBtn.onClick.AddListener(PlayClick);
 
     }
 
-    private void PlayClick()
+    public void PlayClick()
     {
-        if (playing)
+        Debug.Log("PlayClick");
+        if (!playing)
         {
+            Debug.Log("play");
             backgroundMusic.Play();
+            playing = true;
         }
         else
         {
+            Debug.Log("stop");
             backgroundMusic.Stop();
+            playing = false;
         }
     }
 
